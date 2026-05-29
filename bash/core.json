@@ -6,6 +6,18 @@
     "description": "Busca archivos y directorios. Filtra por nombre, tipo, tamaño, fecha, etc."
   },
   {
+    "keywords": ["find", "buscar", "archivos", "directorios", "nombre", "tipo", "tamaño", "fecha", "permisos", "ejecutar comando"],
+    "command": "find [ruta] [expresiones] [acciones]",
+    "example": "find /home -type f -name '*.log' -mtime -7 -exec ls -lh {} \\;",
+    "description": "Potente búsqueda. Filtros: -name (nombre), -type (f/d/l), -size (+1M), -mtime (días modif), -user, -perm. Acciones: -exec, -delete, -print. ¡Ojo con -delete!"
+  },
+  {
+    "keywords": ["find", "ejecutar", "comando sobre resultados", "-exec"],
+    "command": "find ... -exec comando {} \\;",
+    "example": "find . -name '*.tmp' -exec rm -v {} \\;",
+    "description": "Ejecuta un comando para cada archivo encontrado. {} se reemplaza por la ruta, y \\; marca el final del comando."
+  },
+  {
     "keywords": ["directorio", "mkdir", "crear", "carpeta", "make directory"],
     "command": "mkdir [opciones] <directorio>",
     "example": "mkdir -p /ruta/para/mi/directorio",

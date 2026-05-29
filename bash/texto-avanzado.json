@@ -6,6 +6,18 @@
     "description": " >> Agrega texto al archivo, > cambia texto del archivo por el nuevo."
   },
   {
+    "keywords": ["sed", "editor de flujo", "sustituir", "reemplazar", "eliminar líneas", "transformar texto"],
+    "command": "sed [opciones] 'comando' archivo",
+    "example": "sed -i 's/antiguo/nuevo/g' archivo.txt",
+    "description": "Stream EDitor: realiza transformaciones de texto. Común: 's/patrón/reemplazo/flags' (sustitución). Flags: g (global), i (insensible), p (imprimir). -i edita in-place."
+  },
+  {
+    "keywords": ["sed", "eliminar líneas", "rango", "dirección"],
+    "command": "sed '/patrón/d' archivo",
+    "example": "sed '10,20d' archivo.txt  # elimina líneas 10 a 20",
+    "description": "Comando d elimina líneas. Se puede usar con direcciones (número, rango, o patrón)."
+  }
+  {
     "keywords": ["diff", "diferencias", "comparar archivos"],
     "command": "diff [opciones] <archivo1> <archivo2>",
     "example": "diff -u archivo1.txt archivo2.txt",

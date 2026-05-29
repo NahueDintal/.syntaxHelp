@@ -6,6 +6,18 @@
     "description": "Busca archivos usando una base de datos preconstruida (muy rápido)."
   },
   {
+  "keywords": ["grep", "buscar", "texto", "patrón", "expresión regular", "filtrar", "líneas"],
+  "command": "grep [opciones] 'patrón' [archivo...]",
+  "example": "grep -rni 'error' /var/log/ --color=always",
+  "description": "Busca líneas que coincidan con un patrón (regex básica). Opciones: -i (insensible), -r (recursivo), -n (número de línea), -v (invertir), -c (contar), -E (regex extendida), -l (solo nombres de archivo)."
+  },
+  {
+    "keywords": ["grep", "excluir", "invertir", "sin coincidencia"],
+    "command": "grep -v 'patrón' archivo",
+    "example": "grep -v '^#' config.conf | grep -v '^$'  # elimina comentarios y líneas vacías",
+    "description": "Usa -v para mostrar líneas que NO coinciden con el patrón."
+  },
+  {
     "keywords": ["tree", "directorios", "árbol", "buscar archivo", "ruta jerárquica"],
     "command": "tree -P 'init.lua'",
     "example": "tree -P 'init.lua'\n.\n└── home\n    └── usuario\n        └── proyecto\n            └── src\n                └── init.lua",

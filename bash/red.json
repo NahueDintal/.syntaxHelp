@@ -6,10 +6,40 @@
     "description": "Envía paquetes ICMP a un host para probar conectividad. -c número de paquetes."
   },
   {
-    "keywords": ["curl", "transferir", "http", "web", "url", "api"],
+    "keywords": ["ssh", "secure shell", "conexión remota", "servidor", "túnel", "forwarding", "ejecutar comando remoto"],
+    "command": "ssh [opciones] <usuario@host> [comando]",
+    "example": "ssh -p 2222 -i clave.pem user@192.168.1.100 'ls -la /var/www'",
+    "description": "Conexión segura a servidor remoto. Opciones: -p (puerto), -i (clave privada), -L (forwarding local), -R (remoto), -N (sin shell), -f (background). Sin comando abre una shell interactiva."
+  },
+  {
+    "keywords": ["ssh", "túnel", "port forwarding", "forward"],
+    "command": "ssh -L 8080:localhost:80 usuario@host",
+    "example": "ssh -L 9999:localhost:5432 user@server  # accede a PostgreSQL remoto vía localhost:9999",
+    "description": "Reenvía puertos: -L [puerto_local]:[destino]:[puerto_destino] a través del host SSH."
+  },
+  {
+    "keywords": ["ss", "socket statistics", "conexiones", "puertos escuchando", "tcp", "udp", "reemplazo moderno de netstat"],
+    "command": "ss [opciones] [filtro]",
+    "example": "ss -tunap | grep ':80'",
+    "description": "Muestra estadísticas de sockets. Opciones: -t (TCP), -u (UDP), -l (listening), -a (todas), -n (numérico, sin resolución DNS), -p (programa), -e (detalles extendidos). Filtros: 'state established' o 'dport = :22'."
+  },
+  {
+    "keywords": ["ss", "conexiones establecidas", "estado", "filtro"],
+    "command": "ss -tn state established",
+    "example": "ss -tn state established '( dport = :80 or dport = :443 )'",
+    "description": "Filtra conexiones TCP establecidas a puertos 80/443. Muy útil para monitoreo rápido."
+  },
+  {
+    "keywords": ["curl", "transferir", "http", "https", "web", "url", "api", "descargar", "enviar datos", "cabeceras", "método http", "post", "get"],
     "command": "curl [opciones] <URL>",
-    "example": "curl -X GET https://api.ejemplo.com",
-    "description": "Transfiere datos desde o hacia un servidor. Soporta muchos protocolos."
+    "example": "curl -X POST -H 'Content-Type: application/json' -d '{\"nombre\":\"Juan\"}' https://api.ejemplo.com/usuario",
+    "description": "Transfiere datos desde o hacia un servidor. Opciones comunes: -X (método), -H (cabeceras), -d (datos POST), -o (guardar archivo), -O (guardar con nombre remoto), -L (seguir redirecciones), -k (ignorar SSL), -v (verbose), -I (solo cabeceras)."
+  },
+  {
+    "keywords": ["curl", "descargar archivo", "guardar", "output", "progreso"],
+    "command": "curl -o archivo_local.zip <URL>",
+    "example": "curl -L -o google.html https://google.com",
+    "description": "Descarga un archivo y lo guarda con un nombre local (-o) o el nombre remoto (-O). Usa -L para seguir redirecciones."
   },
   {
     "keywords": ["wget", "descargar", "web", "archivo", "http", "ftp"],
