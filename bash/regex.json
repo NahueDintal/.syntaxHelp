@@ -1,11 +1,5 @@
 [
   {
-    "keywords": ["regex", "expresión regular", "patrón", "grep -E", "sed -E", "awk", "=~"],
-    "command": "grep -E 'patrón' archivo\n[[ $var =~ ^patrón$ ]]",
-    "example": "if [[ $email =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then",
-    "description": "Las expresiones regulares se usan en grep -E, sed -E, awk, y en bash con el operador =~ dentro de [[ ]]. Los caracteres especiales: . * ? + ^ $ [ ] { } ( ) | \\"
-  },
-  {
     "keywords": ["regex", "clases de caracteres", "[ ]", "rangos"],
     "command": "[a-z]  [0-9]  [A-Za-z0-9_]",
     "example": "grep '[0-9]' archivo.txt",
