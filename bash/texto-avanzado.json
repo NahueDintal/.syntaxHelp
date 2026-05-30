@@ -12,11 +12,41 @@
     "description": "Stream EDitor: realiza transformaciones de texto. Común: 's/patrón/reemplazo/flags' (sustitución). Flags: g (global), i (insensible), p (imprimir). -i edita in-place."
   },
   {
-    "keywords": ["sed", "eliminar líneas", "rango", "dirección"],
-    "command": "sed '/patrón/d' archivo",
-    "example": "sed '10,20d' archivo.txt  # elimina líneas 10 a 20",
-    "description": "Comando d elimina líneas. Se puede usar con direcciones (número, rango, o patrón)."
-  }
+  "keywords": ["sed", "eliminar líneas", "borrar", "d", "delete", "quitar líneas vacías", "comentarios"],
+  "command": "sed '/patrón/d' archivo",
+  "example": "sed '/^#/d' config.conf  # elimina líneas que empiezan con #\nsed '/^$/d' archivo.txt      # elimina líneas vacías\nsed '5,10d' archivo.txt      # elimina líneas 5 a 10",
+  "description": "Elimina líneas que coinciden con un patrón o dentro de un rango. El comando 'd' borra la línea. Se puede usar con direcciones (número, rango, o expresión regular)."
+  },
+  {
+    "keywords": ["sed", "mostrar", "imprimir", "p", "print", "extraer líneas", "solo algunas líneas"],
+    "command": "sed -n '/patrón/p' archivo",
+    "example": "sed -n '10p' archivo.txt        # muestra solo la línea 10\nsed -n '5,15p' archivo.txt      # muestra líneas 5 a 15\nsed -n '/error/p' log.txt       # muestra líneas con 'error'",
+    "description": "Con -n (no imprimir por defecto) y el comando 'p' (print) se muestran únicamente las líneas seleccionadas. Útil para extraer fragmentos."
+  },
+  {
+    "keywords": ["sed", "insertar", "añadir", "i", "a", "agregar línea antes", "agregar línea después"],
+    "command": "sed '5i\\texto a insertar' archivo   # inserta antes de la línea 5\nsed '5a\\texto a añadir' archivo    # añade después de la línea 5",
+    "example": "sed '/^servidor/i\\# NUEVA SECCIÓN' nginx.conf  # inserta comentario antes de cada línea que empiece con 'servidor'",
+    "description": "i\\ inserta texto antes de la línea indicada; a\\ lo añade después. Se puede usar con direcciones numéricas o patrones. El \\ después de i o a es necesario."
+  },
+  {
+    "keywords": ["sed", "cambiar línea", "sustituir línea entera", "c", "change"],
+    "command": "sed '3c\\nueva línea' archivo",
+    "example": "sed '10c\\# ==== CONFIGURACIÓN PRINCIPAL ====' config.ini  # reemplaza la línea 10",
+    "description": "El comando 'c' reemplaza la línea seleccionada (o rango de líneas) por el texto especificado."
+  },
+  {
+    "keywords": ["sed", "guardar líneas", "exportar", "w", "write", "extraer a archivo"],
+    "command": "sed -n '/patrón/w archivo_salida' origen",
+    "example": "sed -n '/ERROR/w errores.log' app.log   # guarda líneas con ERROR en errores.log",
+    "description": "El comando 'w' escribe las líneas coincidentes en un archivo externo. Normalmente se usa con -n para no imprimir además."
+  },
+  {
+    "keywords": ["sed", "múltiples comandos", "-e", "editar archivo", "-i", "in place", "backup"],
+    "command": "sed -i.bak -e 's/foo/bar/g' -e '/^$/d' archivo",
+    "example": "sed -i.bak 's/old/new/g; /^$/d' datos.txt   # reemplaza y elimina vacías, crea backup",
+    "description": "-i edita el archivo directamente (en GNU sed). Se puede dar una extensión para backup (-i.bak). Se pueden separar comandos con punto y coma (;) o usar múltiples -e."
+  },
   {
     "keywords": ["diff", "diferencias", "comparar archivos"],
     "command": "diff [opciones] <archivo1> <archivo2>",
