@@ -1,0 +1,98 @@
+[
+  {
+    "keywords": ["main", "punto de entrada", "programa principal"],
+    "command": "int main(void) { ... return 0; }",
+    "example": "int main() {\n    printf(\"Hola, C!\\n\");\n    return 0;\n}",
+    "description": "Función principal donde comienza la ejecución. Debe retornar 0 para indicar éxito."
+  },
+  {
+    "keywords": ["include", "biblioteca", "header", "stdio", "librería"],
+    "command": "#include <nombre.h>",
+    "example": "#include <stdio.h>\n#include <stdlib.h>",
+    "description": "Incluye archivos de cabecera para usar funciones como printf, scanf, malloc, etc."
+  },
+  {
+    "keywords": ["variable", "declaración", "tipo", "int", "float", "char"],
+    "command": "tipo nombre = valor;",
+    "example": "int edad = 25;\nfloat precio = 9.99;\nchar inicial = 'J';",
+    "description": "Declara una variable especificando su tipo y, opcionalmente, un valor inicial."
+  },
+  {
+    "keywords": ["printf", "imprimir", "salida", "formato"],
+    "command": "printf(\"formato\", variables...);",
+    "example": "int x = 10;\nprintf(\"El valor es: %d\\n\", x);",
+    "description": "Imprime texto formateado en la consola. Especificadores comunes: %d (entero), %f (float), %c (char), %s (cadena)."
+  },
+  {
+    "keywords": ["scanf", "entrada", "leer", "input"],
+    "command": "scanf(\"formato\", &variable);",
+    "example": "int numero;\nprintf(\"Ingrese un número: \");\nscanf(\"%d\", &numero);",
+    "description": "Lee datos desde la entrada estándar. Requiere el operador & para pasar la dirección de memoria de la variable."
+  },
+  {
+    "keywords": ["if", "condicional", "else", "decisión"],
+    "command": "if (condición) { ... } else { ... }",
+    "example": "if (puntaje >= 60) {\n    printf(\"Aprobado\\n\");\n} else {\n    printf(\"Reprobado\\n\");\n}",
+    "description": "Ejecuta un bloque si la condición es verdadera; opcionalmente ejecuta otro bloque si es falsa."
+  },
+  {
+    "keywords": ["for", "bucle", "iteración", "repetición", "ciclo"],
+    "command": "for (inicialización; condición; incremento) { ... }",
+    "example": "for (int i = 0; i < 5; i++) {\n    printf(\"i = %d\\n\", i);\n}",
+    "description": "Bucle que repite un bloque mientras la condición se cumpla. Suele usarse cuando se conoce la cantidad de iteraciones."
+  },
+  {
+    "keywords": ["while", "bucle", "mientras", "ciclo"],
+    "command": "while (condición) { ... }",
+    "example": "int n = 0;\nwhile (n < 3) {\n    printf(\"n = %d\\n\", n);\n    n++;\n}",
+    "description": "Repite un bloque mientras la condición sea verdadera. La condición se evalúa antes de cada iteración."
+  },
+  {
+    "keywords": ["do while", "hacer mientras", "bucle", "repetir"],
+    "command": "do { ... } while (condición);",
+    "example": "int opcion;\ndo {\n    printf(\"Menú...\\n\");\n    scanf(\"%d\", &opcion);\n} while (opcion != 0);",
+    "description": "Similar a while, pero garantiza que el bloque se ejecute al menos una vez."
+  },
+  {
+    "keywords": ["función", "definir", "retorno", "parámetros"],
+    "command": "tipo_retorno nombre(tipo param1, ...) { ... return valor; }",
+    "example": "int sumar(int a, int b) {\n    return a + b;\n}\n\nint resultado = sumar(4, 6);",
+    "description": "Define una función reutilizable. Puede recibir argumentos y devolver un valor."
+  },
+  {
+    "keywords": ["array", "arreglo", "vector", "índice", "lista"],
+    "command": "tipo nombre[tamaño];",
+    "example": "int notas[3] = {15, 18, 20};\nnotas[1] = 17;\nprintf(\"%d\", notas[0]);",
+    "description": "Colección de elementos del mismo tipo, accedidos mediante un índice que empieza en 0."
+  },
+  {
+    "keywords": ["cadena", "string", "texto", "char array"],
+    "command": "char nombre[longitud];",
+    "example": "char saludo[6] = \"Hola\";\nprintf(\"%s\", saludo);",
+    "description": "En C no existe tipo string; se usa un arreglo de caracteres terminado en '\\0'."
+  },
+  {
+    "keywords": ["puntero", "dirección", "memoria", "referencia", "*", "&"],
+    "command": "tipo *nombre_ptr = &variable;",
+    "example": "int valor = 100;\nint *p = &valor;\nprintf(\"Valor: %d\", *p);",
+    "description": "Variable que almacena una dirección de memoria. * declara el puntero o accede al contenido; & obtiene la dirección de una variable."
+  },
+  {
+    "keywords": ["struct", "registro", "estructura", "compuesto"],
+    "command": "struct Nombre { tipo campo1; tipo campo2; ... };",
+    "example": "struct Alumno {\n    char nombre[50];\n    int edad;\n};\n\nstruct Alumno a1;\na1.edad = 22;",
+    "description": "Agrupa varias variables (campos) bajo un mismo nombre. Útil para representar objetos o registros."
+  },
+  {
+    "keywords": ["define", "constante", "macro", "preprocesador"],
+    "command": "#define NOMBRE valor",
+    "example": "#define PI 3.14159\n#define CUADRADO(x) ((x)*(x))",
+    "description": "Define una macro o constante simbólica que el preprocesador reemplaza antes de compilar."
+  },
+  {
+    "keywords": ["comentario", "anotación", "explicar", "//", "/* */"],
+    "command": "// comentario de una línea\n/* comentario multilínea */",
+    "example": "// Esto suma dos números\nint total = a + b; /* resultado */",
+    "description": "Ignorados por el compilador. Sirven para explicar el código."
+  }
+]
