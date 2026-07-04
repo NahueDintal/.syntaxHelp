@@ -46,17 +46,25 @@ buscar() {
     return
   fi
 
-  local jq_filter='.[] | select( any(.keywords[]; '
-  local first=1
-  for token in $tokens; do
-    if [[ $first -eq 1 ]]; then
-      jq_filter+=". == \"$token\""
-      first=0
-    else
-      jq_filter+=" or . == \"$token\""
-    fi
-  done
-  jq_filter+=' ) )'
+  # local jq_filter='.[] | select( any(.keywords[]; '
+  # local first=1
+  # for token in $tokens; do
+  #   if [[ $first -eq 1 ]]; then
+  #     jq_filter+=". == \"$token\""
+  #     first=0
+  #   else
+  #     jq_filter+=" or . == \"$token\""
+  #   fi
+  # done
+  # jq_filter+=' ) )'
+
+  local query_lower=$(echo "$query" | tr '[:upper:]' '[:lower:]')
+
+  local jq_filter='.[] | select(
+  (.command | ascii_downcase | contains("'"$query_lower"'")) or
+  (.description | ascii_downcase | contains("'"$query_lower"'")) or
+  (.keywords // [] | any(ascii_downcase | contains("'"$query_lower"'")))
+)'
 
   for file in "${files[@]}"; do
     if ! jq empty "$file" 2>/dev/null; then
