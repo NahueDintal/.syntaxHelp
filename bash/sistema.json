@@ -32,7 +32,7 @@
   {
     "keywords": ["dmesg", "kernel", "mensajes", "arranque", "boot"],
     "command": "dmesg [opciones]",
-    "example": "dmesg | grep error",
+    "example": "dmesg | grep error; dmesg -w (wait, espera y podes ver en vivo el kernel)",
     "description": "Muestra los mensajes del buffer del kernel (útil para ver errores de hardware)."
   },
   {
