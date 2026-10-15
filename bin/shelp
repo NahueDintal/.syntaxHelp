@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [[ -t 1 ]]; then
   BOLD='\033[1m'
   DIM='\033[2m'
