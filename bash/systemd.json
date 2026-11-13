@@ -27,7 +27,7 @@
     "keywords": ["systemctl", "servicio", "estado", "status"],
     "command": "systemctl status <servicio>",
     "example": "systemctl status nginx",
-    "description": "Muestra el estado de un servicio, logs recientes."
+    "description": "Muestra el estado de un servicio y sus logs recientes."
   },
   {
     "keywords": ["systemctl", "habilitar", "enable", "arranque", "inicio automático"],
@@ -44,37 +44,331 @@
   {
     "keywords": ["systemctl", "listar", "list-units", "unidades", "servicios activos"],
     "command": "systemctl list-units [opciones]",
-    "example": "systemctl list-units --type=service",
-    "description": "Lista las unidades (servicios, sockets, etc.) activas."
+    "example": "systemctl list-units --type=service --state=running",
+    "description": "Lista las unidades activas. Con --all incluye las inactivas.[reference:0]"
   },
   {
     "keywords": ["systemctl", "list-unit-files", "archivos de unidad", "habilitados"],
     "command": "systemctl list-unit-files [opciones]",
     "example": "systemctl list-unit-files --type=service",
-    "description": "Lista los archivos de unidad y si están habilitados o no."
+    "description": "Lista los archivos de unidad y su estado (enabled/disabled).[reference:1]"
   },
   {
-    "keywords": ["journalctl", "logs", "registros", "systemd-journal", "ver"],
+    "keywords": ["systemctl", "list-sockets", "sockets", "activación por socket"],
+    "command": "systemctl list-sockets",
+    "example": "systemctl list-sockets",
+    "description": "Lista los sockets y qué unidad activan.[reference:2]"
+  },
+  {
+    "keywords": ["systemctl", "list-timers", "temporizadores", "tareas programadas", "cron"],
+    "command": "systemctl list-timers",
+    "example": "systemctl list-timers --all",
+    "description": "Lista los temporizadores (tareas programadas, similar a cron).[reference:3]"
+  },
+  {
+    "keywords": ["systemctl", "list-jobs", "trabajos", "jobs", "en curso"],
+    "command": "systemctl list-jobs",
+    "example": "systemctl list-jobs",
+    "description": "Muestra los trabajos (jobs) de systemd actualmente en curso.[reference:4]"
+  },
+  {
+    "keywords": ["systemctl", "list-dependencies", "dependencias", "árbol"],
+    "command": "systemctl list-dependencies [unidad]",
+    "example": "systemctl list-dependencies nginx.service",
+    "description": "Muestra el árbol de dependencias de una unidad o del target por defecto.[reference:5]"
+  },
+  {
+    "keywords": ["systemctl", "is-active", "activo", "comprobar", "script"],
+    "command": "systemctl is-active <servicio>",
+    "example": "systemctl is-active nginx",
+    "description": "Comprueba si un servicio está activo. Devuelve 'active' o 'inactive'. Útil en scripts.[reference:6]"
+  },
+  {
+    "keywords": ["systemctl", "is-enabled", "habilitado", "comprobar", "script"],
+    "command": "systemctl is-enabled <servicio>",
+    "example": "systemctl is-enabled nginx",
+    "description": "Comprueba si un servicio está habilitado para el arranque.[reference:7]"
+  },
+  {
+    "keywords": ["systemctl", "is-failed", "fallido", "comprobar", "script"],
+    "command": "systemctl is-failed <servicio>",
+    "example": "systemctl is-failed nginx",
+    "description": "Comprueba si una unidad ha fallado.[reference:8]"
+  },
+  {
+    "keywords": ["systemctl", "failed", "fallidos", "errores", "estado failed"],
+    "command": "systemctl --failed",
+    "example": "systemctl --failed",
+    "description": "Lista todas las unidades que se encuentran en estado 'failed'.[reference:9]"
+  },
+  {
+    "keywords": ["systemctl", "reset-failed", "limpiar", "resetear", "estado failed"],
+    "command": "systemctl reset-failed [unidad...]",
+    "example": "systemctl reset-failed nginx.service",
+    "description": "Resetea el estado 'failed' de una o más unidades.[reference:10]"
+  },
+  {
+    "keywords": ["systemctl", "mask", "enmascarar", "bloquear", "imposible iniciar"],
+    "command": "systemctl mask <unidad>",
+    "example": "systemctl mask cups.service",
+    "description": "Enmascara una unidad (enlace a /dev/null), haciéndola imposible de iniciar por cualquier vía.[reference:11]"
+  },
+  {
+    "keywords": ["systemctl", "unmask", "desenmascarar", "reactivar", "quitar mask"],
+    "command": "systemctl unmask <unidad>",
+    "example": "systemctl unmask cups.service",
+    "description": "Reactiva una unidad previamente enmascarada.[reference:12]"
+  },
+  {
+    "keywords": ["systemctl", "cat", "ver unidad", "contenido", "drop-in"],
+    "command": "systemctl cat <unidad>",
+    "example": "systemctl cat nginx.service",
+    "description": "Muestra el contenido final del archivo de unidad, incluyendo drop-ins.[reference:13]"
+  },
+  {
+    "keywords": ["systemctl", "show", "propiedades", "detalles", "variables"],
+    "command": "systemctl show <unidad>",
+    "example": "systemctl show nginx.service",
+    "description": "Muestra las propiedades de una unidad en formato clave=valor.[reference:14]"
+  },
+  {
+    "keywords": ["systemctl", "edit", "editar", "drop-in", "override", "anular"],
+    "command": "systemctl edit <unidad>",
+    "example": "systemctl edit nginx.service",
+    "description": "Crea o edita un archivo drop-in (override.conf) para la unidad. Forma segura de modificar sin tocar el original.[reference:15]"
+  },
+  {
+    "keywords": ["systemctl", "edit --full", "editar completo", "archivo principal"],
+    "command": "systemctl edit --full <unidad>",
+    "example": "systemctl edit --full nginx.service",
+    "description": "Edita el archivo de unidad principal completo (menos recomendado que el drop-in).[reference:16]"
+  },
+  {
+    "keywords": ["systemctl", "daemon-reload", "recargar systemd", "nuevas unidades", "cambios"],
+    "command": "systemctl daemon-reload",
+    "example": "systemctl daemon-reload",
+    "description": "Recarga los archivos de unidad de systemd tras crear o modificar uno.[reference:17]"
+  },
+  {
+    "keywords": ["systemctl", "daemon-reexec", "reejecutar", "reiniciar systemd", "gestor"],
+    "command": "systemctl daemon-reexec",
+    "example": "systemctl daemon-reexec",
+    "description": "Reejecuta el gestor de systemd (serializa y deserializa su estado). Útil tras actualizar systemd.[reference:18]"
+  },
+  {
+    "keywords": ["systemctl", "get-default", "target por defecto", "runlevel", "default"],
+    "command": "systemctl get-default",
+    "example": "systemctl get-default",
+    "description": "Muestra el target por defecto al que arranca el sistema (equivalente al runlevel).[reference:19]"
+  },
+  {
+    "keywords": ["systemctl", "set-default", "cambiar target", "runlevel", "default"],
+    "command": "systemctl set-default <target>",
+    "example": "systemctl set-default multi-user.target",
+    "description": "Establece el target por defecto para el próximo arranque.[reference:20]"
+  },
+  {
+    "keywords": ["systemctl", "isolate", "aislar", "cambiar target", "detener servicios"],
+    "command": "systemctl isolate <target>",
+    "example": "systemctl isolate rescue.target",
+    "description": "Cambia al target especificado, deteniendo los servicios no necesarios para él."
+  },
+  {
+    "keywords": ["systemctl", "rescue", "rescate", "modo rescate", "single user"],
+    "command": "systemctl rescue",
+    "example": "systemctl rescue",
+    "description": "Entra en modo de rescate (rescue.target), similar al modo monousuario."
+  },
+  {
+    "keywords": ["systemctl", "emergency", "emergencia", "modo emergencia"],
+    "command": "systemctl emergency",
+    "example": "systemctl emergency",
+    "description": "Entra en modo de emergencia (emergency.target), el nivel más básico.[reference:23]"
+  },
+  {
+    "keywords": ["systemctl", "default", "volver default", "multi-user", "runlevel"],
+    "command": "systemctl default",
+    "example": "systemctl default",
+    "description": "Vuelve al target por defecto (normalmente multi-user.target).[reference:24]"
+  },
+  {
+    "keywords": ["systemctl", "kill", "matar", "señal", "proceso"],
+    "command": "systemctl kill <unidad> [--signal=SIG]",
+    "example": "systemctl kill nginx.service --signal=SIGHUP",
+    "description": "Envía una señal a los procesos de una unidad."
+  },
+  {
+    "keywords": ["systemctl", "revert", "revertir", "restaurar", "deshacer cambios"],
+    "command": "systemctl revert <unidad>",
+    "example": "systemctl revert nginx.service",
+    "description": "Revierte todos los cambios hechos con edit, set-property y mask, restaurando el archivo original del paquete.[reference:26]"
+  },
+  {
+    "keywords": ["systemctl", "reenable", "rehabilitar", "enable de nuevo"],
+    "command": "systemctl reenable <unidad>",
+    "example": "systemctl reenable nginx.service",
+    "description": "Vuelve a habilitar una unidad, recreando los enlaces simbólicos de enable.[reference:27]"
+  },
+  {
+    "keywords": ["systemctl", "preset", "preajuste", "resetear", "política por defecto"],
+    "command": "systemctl preset <unidad>",
+    "example": "systemctl preset nginx.service",
+    "description": "Resetea el estado 'enabled/disabled' de una unidad según la política preset del sistema.[reference:28]"
+  },
+  {
+    "keywords": ["systemctl", "reboot", "reiniciar sistema", "poweroff", "apagar"],
+    "command": "systemctl reboot | poweroff | suspend | hibernate",
+    "example": "systemctl reboot",
+    "description": "Reinicia, apaga, suspende o hiberna el sistema.[reference:29]"
+  },
+  {
+    "keywords": ["journalctl", "logs", "registros", "systemd-journal", "ver", "todo"],
     "command": "journalctl [opciones]",
     "example": "journalctl -u nginx -f",
-    "description": "Consulta los logs de systemd. -u unidad, -f seguir, --since ayer."
+    "description": "Consulta los logs de systemd. Sin opciones muestra todos los registros.[reference:30]"
   },
   {
     "keywords": ["journalctl", "logs", "boot", "arranque actual"],
-    "command": "journalctl -b",
+    "command": "journalctl -b [N]",
     "example": "journalctl -b -1",
-    "description": "Muestra los logs del arranque actual. Con -b -1 el anterior."
+    "description": "Muestra los logs del arranque actual. Con -b -1 el anterior, -b -2 el anterior a ese, etc.[reference:31]"
   },
   {
-    "keywords": ["systemctl", "daemon-reload", "recargar systemd", "nuevas unidades"],
-    "command": "systemctl daemon-reload",
-    "example": "systemctl daemon-reload",
-    "description": "Recarga los archivos de unidad de systemd tras crear/modificar uno."
+    "keywords": ["journalctl", "list-boots", "arranques", "lista de boots"],
+    "command": "journalctl --list-boots",
+    "example": "journalctl --list-boots",
+    "description": "Lista todos los arranques registrados con sus IDs y fechas.[reference:32]"
   },
   {
-    "keywords": ["tiempo de inicio", "Programas inicio", "inicio sistema", "systemd"],
-    "command": "Systemd-analyze",
+    "keywords": ["journalctl", "unidad", "servicio", "filtrar", "-u"],
+    "command": "journalctl -u <unidad>",
+    "example": "journalctl -u nginx.service",
+    "description": "Filtra los logs por una unidad (servicio) específica.[reference:33]"
+  },
+  {
+    "keywords": ["journalctl", "prioridad", "error", "err", "-p"],
+    "command": "journalctl -p <prioridad>",
+    "example": "journalctl -p err",
+    "description": "Filtra por nivel de prioridad (emerg, alert, crit, err, warning, notice, info, debug)."
+  },
+  {
+    "keywords": ["journalctl", "seguir", "follow", "tail", "-f"],
+    "command": "journalctl -f",
+    "example": "journalctl -f -u nginx",
+    "description": "Sigue la salida de los logs en tiempo real (similar a tail -f).[reference:34]"
+  },
+  {
+    "keywords": ["journalctl", "revertir", "reverse", "más nuevo primero", "-r"],
+    "command": "journalctl -r",
+    "example": "journalctl -r -u nginx",
+    "description": "Muestra los logs en orden inverso (los más nuevos primero).[reference:35]"
+  },
+  {
+    "keywords": ["journalctl", "líneas", "número", "tail", "-n"],
+    "command": "journalctl -n <número>",
+    "example": "journalctl -n 50",
+    "description": "Muestra solo las últimas N líneas del journal.[reference:36]"
+  },
+  {
+    "keywords": ["journalctl", "desde", "hasta", "rango", "tiempo", "--since", "--until"],
+    "command": "journalctl --since <fecha> --until <fecha>",
+    "example": "journalctl --since \"2026-11-12 10:00\" --until \"2026-11-12 12:00\"",
+    "description": "Filtra los logs por un rango de tiempo.[reference:37]"
+  },
+  {
+    "keywords": ["journalctl", "kernel", "dmesg", "mensajes del kernel", "-k"],
+    "command": "journalctl -k",
+    "example": "journalctl -k",
+    "description": "Muestra solo los mensajes del kernel (similar a dmesg).[reference:38]"
+  },
+  {
+    "keywords": ["journalctl", "salida", "formato", "output", "-o"],
+    "command": "journalctl -o <formato>",
+    "example": "journalctl -o json-pretty",
+    "description": "Define el formato de salida (short, json, json-pretty, cat, verbose, export, etc.)."
+  },
+  {
+    "keywords": ["journalctl", "sin paginador", "no-pager", "volcar"],
+    "command": "journalctl --no-pager",
+    "example": "journalctl --no-pager -u nginx",
+    "description": "No usa un paginador (menos, more) para la salida. Útil en scripts o para redirigir a un archivo.[reference:39]"
+  },
+  {
+    "keywords": ["journalctl", "disco", "espacio", "uso", "--disk-usage"],
+    "command": "journalctl --disk-usage",
+    "example": "journalctl --disk-usage",
+    "description": "Muestra el espacio en disco que ocupan los archivos del journal.[reference:40]"
+  },
+  {
+    "keywords": ["journalctl", "limpiar", "vaciar", "tamaño", "vacuum-size", "vacuum-time"],
+    "command": "journalctl --vacuum-size=<tamaño> | --vacuum-time=<tiempo>",
+    "example": "journalctl --vacuum-size=500M",
+    "description": "Limpia los archivos del journal hasta un tamaño o tiempo determinado."
+  },
+  {
+    "keywords": ["journalctl", "rotar", "rotar logs", "--rotate"],
+    "command": "journalctl --rotate",
+    "example": "journalctl --rotate",
+    "description": "Fuerza la rotación de los archivos del journal."
+  },
+  {
+    "keywords": ["systemd-analyze", "tiempo de inicio", "tiempo de arranque", "time"],
+    "command": "systemd-analyze time",
+    "example": "systemd-analyze time",
+    "description": "Muestra el tiempo total de arranque (firmware, cargador, kernel, userspace).[reference:42]"
+  },
+  {
+    "keywords": ["systemd-analyze", "blame", "culpables", "tiempo por unidad", "lentitud"],
+    "command": "systemd-analyze blame",
     "example": "systemd-analyze blame",
-    "description": "Muestra los tiempo de inicio de sistema y los programas."
+    "description": "Lista todas las unidades ordenadas por el tiempo que tardaron en inicializarse (de mayor a menor).[reference:43]"
+  },
+  {
+    "keywords": ["systemd-analyze", "critical-chain", "cadena crítica", "cuello de botella"],
+    "command": "systemd-analyze critical-chain [unidad]",
+    "example": "systemd-analyze critical-chain",
+    "description": "Muestra el árbol de la cadena de tiempo crítica durante el arranque, identificando el cuello de botella principal.[reference:44]"
+  },
+  {
+    "keywords": ["systemd-analyze", "plot", "gráfico", "svg", "visualizar arranque"],
+    "command": "systemd-analyze plot > arranque.svg",
+    "example": "systemd-analyze plot > arranque.svg",
+    "description": "Genera un gráfico SVG que muestra qué servicios se iniciaron y cuánto tiempo tardaron.[reference:45]"
+  },
+  {
+    "keywords": ["systemd-analyze", "dot", "grafo", "dependencias", "graphviz"],
+    "command": "systemd-analyze dot [patrón...] > grafo.dot",
+    "example": "systemd-analyze dot nginx.service > nginx.dot",
+    "description": "Genera un grafo de dependencias en formato DOT (Graphviz).[reference:46]"
+  },
+  {
+    "keywords": ["systemd-analyze", "verify", "verificar", "sintaxis", "archivo de unidad"],
+    "command": "systemd-analyze verify <archivo...>",
+    "example": "systemd-analyze verify /etc/systemd/system/mi-servicio.service",
+    "description": "Verifica la sintaxis y consistencia de archivos de unidad.[reference:47]"
+  },
+  {
+    "keywords": ["systemd-analyze", "unit-files", "unit-paths", "rutas", "archivos de unidad"],
+    "command": "systemd-analyze unit-files | unit-paths",
+    "example": "systemd-analyze unit-files",
+    "description": "Muestra información sobre los archivos de unidad o las rutas de búsqueda de unidades.[reference:48]"
+  },
+  {
+    "keywords": ["systemd-analyze", "exit-status", "códigos de salida", "estados"],
+    "command": "systemd-analyze exit-status [estado...]",
+    "example": "systemd-analyze exit-status 203",
+    "description": "Muestra la descripción de un código de salida de systemd.[reference:49]"
+  },
+  {
+    "keywords": ["systemd-analyze", "security", "seguridad", "sandbox", "endurecimiento"],
+    "command": "systemd-analyze security [unidad...]",
+    "example": "systemd-analyze security nginx.service",
+    "description": "Analiza la exposición de seguridad de una unidad y sugiere mejoras.[reference:50]"
+  },
+  {
+    "keywords": ["systemd-analyze", "cat-config", "ver configuración", "fusionada"],
+    "command": "systemd-analyze cat-config <nombre|ruta>",
+    "example": "systemd-analyze cat-config systemd/system.conf",
+    "description": "Muestra la configuración fusionada de un archivo (incluyendo drop-ins).[reference:51]"
   }
 ]
